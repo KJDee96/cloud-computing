@@ -68,7 +68,6 @@ coverage.xml
 *.log
 local_settings.py
 db.sqlite3
-.db
 
 # Flask stuff:
 instance/
@@ -128,3 +127,4 @@ dmypy.json
 
 
 # End of https://www.gitignore.io/api/flask
+/app.db
