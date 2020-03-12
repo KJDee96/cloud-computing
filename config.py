@@ -18,3 +18,6 @@ class Config(object):
     ADMINS = ['kierandee5237@gmail.com']
 
     POSTS_PER_PAGE = 10
+
+    UPLOADED_AUDIO_DEST = basedir + '/static/audio/'
+    UPLOADED_AUDIO_URL = 'http://localhost:5000/static/audio/'

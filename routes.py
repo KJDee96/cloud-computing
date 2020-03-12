@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from forms import LoginForm, RegistrationForm, EditProfileForm
 from forms import PostForm
-from models import User, Post
+from models import User, Upload
 from werkzeug.urls import url_parse
 from forms import ResetPasswordRequestForm
 from forms import ResetPasswordForm
