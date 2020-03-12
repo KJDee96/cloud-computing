@@ -2,22 +2,6 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-    {% if form %}
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.post.label }}<br>
-            {{ form.post(cols=32, rows=4) }}<br>
-            {% for error in form.post.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-    {% endif %}
-    {% for post in posts %}
-        {% include 'includes/post.html' %}
-    {% endfor %}
     {% if prev_url %}
     <a href="{{ prev_url }}">Newer posts</a>
     {% endif %}

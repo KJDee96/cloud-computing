@@ -89,5 +89,11 @@ class Upload(db.Model):
     media_url = db.Column(db.String, default=None, nullable=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
+    def __init__(self, title, user_id, media_filename=None, media_url=None):
+        self.audio_title = title
+        self.user_id = user_id
+        self.media_filename = media_filename
+        self.media_url = media_url
+
     def __repr__(self):
         return '<Upload {}>'.format(self.body)

@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from models import User
+from app import audio
 
 
 class LoginForm(FlaskForm):
@@ -62,4 +64,9 @@ class ResetPasswordForm(FlaskForm):
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Request Password Reset')
+
+
+class UploadAudioForm(FlaskForm):
+    audio_title = StringField('Audio Title', validators=[DataRequired()])
+    audio_file = FileField('Audio File', validators=[FileRequired(), FileAllowed(audio, 'Audio only!')])
 

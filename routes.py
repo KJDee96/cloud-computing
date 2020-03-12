@@ -8,7 +8,9 @@ from models import User, Upload
 from werkzeug.urls import url_parse
 from forms import ResetPasswordRequestForm
 from forms import ResetPasswordForm
+from forms import UploadAudioForm
 from emails import send_password_reset_email
+from app import audio
 
 
 @app.before_request
@@ -22,22 +24,15 @@ def before_request():
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    form = PostForm()
-    if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user)
-        db.session.add(post)
-        db.session.commit()
-        flash('Your post is now live!')
-        return redirect(url_for('index'))
     page = request.args.get('page', 1, type=int)
-    posts = current_user.followed_posts().paginate(
+    media = current_user.favourite_media().paginate(
         page, app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('index', page=posts.next_num)\
-        if posts.has_next else None
-    prev_url = url_for('index', page=posts.prev_num) \
-        if posts.has_prev else None
-    return render_template("index.html", title='Home Page', form=form,
-                           posts=posts.items, next_url=next_url, prev_url=prev_url)
+    next_url = url_for('index', page=media.next_num)\
+        if media.has_next else None
+    prev_url = url_for('index', page=media.prev_num) \
+        if media.has_prev else None
+    return render_template("index.html", title='Home Page',
+                           posts=media.items, next_url=next_url, prev_url=prev_url)
 
 
 @app.route('/about')
@@ -90,13 +85,13 @@ def register():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    posts = user.posts.order_by(Post.timestamp.desc()).paginate(
+    uploads = user.uploads.order_by(Upload.timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('user', username=user.username, page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('user', username=user.username, page=posts.prev_num) \
-        if posts.has_prev else None
-    return render_template('user.html', user=user, posts=posts.items,
+    next_url = url_for('user', username=user.username, page=uploads.next_num) \
+        if uploads.has_next else None
+    prev_url = url_for('user', username=user.username, page=uploads.prev_num) \
+        if uploads.has_prev else None
+    return render_template('user.html', user=user, uploads=uploads.items,
                            next_url=next_url, prev_url=prev_url)
 
 
@@ -152,7 +147,7 @@ def unfollow(username):
 @login_required
 def explore():
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
+    posts = Upload.query.order_by(Upload.timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('explore', page=posts.next_num) \
         if posts.has_next else None
@@ -191,3 +186,25 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
+
+
+@app.route('/add', methods=['GET', 'POST'])
+@login_required
+def add_audio():
+    # Cannot pass in 'request.form' to AddRecipeForm constructor, as this will cause 'request.files' to not be
+    # sent to the form.  This will cause AddRecipeForm to not see the file data.
+    # Flask-WTF handles passing form data to the form, so not parameters need to be included.
+    form = UploadAudioForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            filename = audio.save(request.files['audio_file'])
+            url = audio.url(filename)
+            new_upload = Upload(form.audio_title.data, current_user.id, filename, url)
+            db.session.add(new_upload)
+            db.session.commit()
+            flash('New media, {}, added!'.format(new_upload.audio_title), 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('ERROR! Media was not uploaded.', 'error')
+
+    return render_template('file_upload.html', form=form)
