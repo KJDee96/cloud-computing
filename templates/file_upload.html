@@ -4,7 +4,6 @@
     <h1>Audio upload</h1>
     <form action="{{ url_for('add_audio') }}" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
-        {{ form.audio_title(placeholder="Enter audio Title") }}
         {{ form.audio_file }}
         <button class="btn btn-sm btn-success" type="submit">Upload</button>
     </form>

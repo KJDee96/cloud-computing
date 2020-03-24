@@ -2,10 +2,13 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-    {% if prev_url %}
-    <a href="{{ prev_url }}">Newer posts</a>
+
+    {% if not uploads %}
+        You haven't uploaded anything
+    {%  else %}
+        {% for upload in uploads %}
+            {% include 'includes/upload.html' %}
+        {% endfor %}
     {% endif %}
-    {% if next_url %}
-    <a href="{{ next_url }}">Older posts</a>
-    {% endif %}
+
 {% endblock %}

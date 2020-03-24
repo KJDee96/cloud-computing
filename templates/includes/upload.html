@@ -1,0 +1,13 @@
+<table>
+    <tr>
+        <td>
+            {{ upload.media_filename }}
+            <br>
+
+            <audio controls>
+                <source src="{{ upload.media_url }}" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+        </td>
+    </tr>
+</table>
