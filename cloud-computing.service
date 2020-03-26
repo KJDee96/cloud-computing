@@ -3,7 +3,7 @@ Description=uWSGI instance to serve cloud computing app
 After=network.target
 
 [Service]
-User=sammy
+User=root
 Group=www-data
 WorkingDirectory=/var/www/cloud-computing
 Environment="PATH=/var/www/cloud-computing/venv/bin"
