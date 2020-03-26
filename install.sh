@@ -10,6 +10,7 @@ pip3 install wheel
 
 pip3 install -r requirements.txt
 pip3 install uwsgi
+flask db upgrade
 deactivate
 cp cloud-computing.service /etc/systemd/system/cloud-computing.service
 
