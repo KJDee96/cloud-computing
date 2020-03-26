@@ -7,11 +7,12 @@ python3.6 -m venv venv
 source venv/bin/activate
 
 pip3 install wheel
-
 pip3 install -r requirements.txt
 pip3 install uwsgi
 flask db upgrade
+
 deactivate
+
 cp cloud-computing.service /etc/systemd/system/cloud-computing.service
 
 systemctl start cloud-computing

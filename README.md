@@ -9,7 +9,36 @@ Required Programs:
 - virtualenv
 - virtualenvwrapper
 
-## Installation:
+## Virtualbox setup to test
+1. VM settings -> network -> Adapter 2 -> set to bridged
+2. Run "ip addr" to find both adapter names -> edit /etc/netplan/<file name here (tab complete it, it exists by default)> as follows (make sure to use spaces, do not use tabs)
+    ```bash
+    network:
+        ethernets:
+            <device 1>:
+                dhcp4: true
+            <device 2>:
+                dhcp4: true
+        version 2
+    ```
+3. run netplan apply + reboot
+
+## EASY Installation (tested on ubuntu server 18.04)
+
+```bash
+sudo mkdir /var/www
+cd /var/www
+git clone <this repo>
+cd <dir>
+sudo -i
+chmod 645 install.sh
+./install.sh
+exit
+```
+
+Then edit /etc/nginx/sites-available/cloud-computing with the IP address for the bridged adapter (adapter 2)
+
+## HARD Installation
 ### Pip3
 ```
 sudo apt-get install python3-pip
@@ -30,13 +59,12 @@ Activate virtual environment
 source <dir_name>/bin/activate
 ```
 
-Install wheel first or nothing will build
+Install wheel first or nothing will build (deactivate venv)
 ```bash
 pip3 install wheel
 ```
 
-Clone repo and move contents to <dir_name>
-Install project requirements inside project folder
+Install project requirements inside project folder (activate venv)
 ```bash
 pip3 install -r requirements.txt
 ```
@@ -53,7 +81,7 @@ flask db upgrade
 ```
 
 ### uwsgi
-Install
+Install uswgi (activate venv)
 ```bash
 pip3 install uwsgi
 ```
