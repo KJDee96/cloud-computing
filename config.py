@@ -1,5 +1,5 @@
 import os
-
+from flask import request
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -12,4 +12,4 @@ class Config(object):
 
     UPLOADED_AUDIO_FOLDER = '/static/audio/'
     UPLOADED_AUDIO_DEST = basedir + UPLOADED_AUDIO_FOLDER
-    UPLOADED_AUDIO_URL = 'http://localhost:5000' + UPLOADED_AUDIO_FOLDER
+    UPLOADED_AUDIO_URL = request.url_root + UPLOADED_AUDIO_FOLDER
