@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve cloud computing app
+After=network.target
+
+[Service]
+User=sammy
+Group=www-data
+WorkingDirectory=/var/www/cloud-computing
+Environment="PATH=/var/www/cloud-computing/venv/bin"
+ExecStart=/var/www/cloud-computing/venv/bin/uwsgi --ini app.ini
+
+[Install]
+WantedBy=multi-user.target
