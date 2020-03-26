@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Audio upload</h1>
+    <form action="{{ url_for('add_audio') }}" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {{ form.audio_file }}
+        <button class="btn btn-sm btn-success" type="submit">Upload</button>
+    </form>
+{% endblock %}

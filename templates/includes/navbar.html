@@ -1,5 +1,4 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a class="navbar-brand" href="">{{ title }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03"
             aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -11,10 +10,7 @@
                 <a class="nav-link" href="{{ url_for('index') }}">Home</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('about') }}">About</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('explore') }}">Explore</a>
+                <a class="nav-link" href="{{ url_for('add_audio') }}">Upload audio</a>
             </li>
         </ul>
         <ul class="navbar-nav mr-right">
@@ -22,7 +18,7 @@
                 {% if current_user.is_anonymous %}
                     <a class="nav-link" href="{{ url_for('login') }}">Login</a>
                 {% else %}
-                    <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+                    <a class="nav-link" href="{{ url_for('edit_profile', username=current_user.username) }}">Edit Profile</a>
                     <li class="nav-item active">
                     <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                     </li>

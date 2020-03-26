@@ -35,3 +35,13 @@ Install project requirements inside project folder
 ```
 pip3 install -r requirements.txt
 ```
+
+### DB Setup:
+If you edit model.py, run this to generate a new migration
+```
+flask db migrate -m <"migration description">
+```
+To run DB migrations against a DB - if no DB exists, this will also create one (currently running SQLite3)
+```
+flask db upgrade
+```
