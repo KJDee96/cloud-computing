@@ -29,13 +29,11 @@ class Upload(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     media_filename = db.Column(db.String, default=None, nullable=True)
-    media_url = db.Column(db.String, default=None, nullable=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    def __init__(self, user_id, media_filename, media_url):
+    def __init__(self, user_id, media_filename):
         self.user_id = user_id
         self.media_filename = media_filename
-        self.media_url = media_url
 
     def __repr__(self):
         return '<Upload {}>'.format(self.body)

@@ -1,8 +1,8 @@
-"""create user and upload tables
+"""create tables
 
-Revision ID: c3d3fd31d21f
+Revision ID: f60a05f290e9
 Revises: 
-Create Date: 2020-03-24 20:17:07.215708
+Create Date: 2020-03-26 18:32:32.994859
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c3d3fd31d21f'
+revision = 'f60a05f290e9'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,7 +29,6 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('media_filename', sa.String(), nullable=True),
-    sa.Column('media_url', sa.String(), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')

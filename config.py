@@ -1,5 +1,4 @@
 import os
-from flask import request
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -10,6 +9,5 @@ class Config(object):
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    UPLOADED_AUDIO_FOLDER = '/static/audio/'
-    UPLOADED_AUDIO_DEST = basedir + UPLOADED_AUDIO_FOLDER
-    UPLOADED_AUDIO_URL = 'http://localhost:5000' + UPLOADED_AUDIO_FOLDER
+    UPLOADED_AUDIO_FOLDER = 'static/audio/'
+    UPLOADED_AUDIO_DEST = basedir + '/' + UPLOADED_AUDIO_FOLDER

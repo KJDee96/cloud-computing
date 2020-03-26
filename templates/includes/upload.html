@@ -1,11 +1,11 @@
 <table>
     <tr>
         <td>
-            {{ upload.media_filename }}
+            {{ upload.media_filename.replace(current_user.username + '/' , '') }}
             <br>
 
             <audio controls>
-                <source src="{{ upload.media_url }}" type="audio/mp3">
+                <source src="{{ request.url_root + config['UPLOADED_AUDIO_FOLDER'] + upload.media_filename }}" type="audio/mp3">
                 Your browser does not support the audio element.
             </audio>
         </td>

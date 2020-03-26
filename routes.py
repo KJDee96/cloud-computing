@@ -83,9 +83,8 @@ def add_audio():
     form = UploadAudioForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            filename = audio.save(request.files['audio_file'])
-            url = audio.url(filename)
-            new_upload = Upload(current_user.id, filename, url)
+            filename = audio.save(request.files['audio_file'], folder=current_user.username)
+            new_upload = Upload(current_user.id, filename)
             db.session.add(new_upload)
             db.session.commit()
             flash('New media, {}, added!'.format(new_upload.media_filename), 'success')
