@@ -40,16 +40,32 @@ Then edit /etc/nginx/sites-available/cloud-computing with the local IP address f
 
 ## HARD Installation
 ### Pip3
-```
+```bash
 sudo apt-get install python3-pip
 ```
 ### VirtualEnv & VirtualEnv Wrapper:
-```
+```bash
 sudo apt-get install virutalenv virtualenvwrapper
+```
+or this if it complains
+```bash
+sudo apt-get install python3-venv
+```
+
+### wheel
+Install wheel first for code compilation
+```bash
+pip3 install wheel
+```
+
+### uwsgi
+Install uwsgi for gateway management
+```bash
+pip3 install uwsgi
 ```
 
 ### Flask Env Setup:
-Create virtual environment folder
+Create virtual environment folder inside of 
 ```bash
 python3 -m venv <dir_name>
 ```
@@ -59,12 +75,7 @@ Activate virtual environment
 source <dir_name>/bin/activate
 ```
 
-Install wheel first or nothing will build (deactivate venv)
-```bash
-pip3 install wheel
-```
-
-Install project requirements inside project folder (activate venv)
+Install project requirements inside project folder (active venv)
 ```bash
 pip3 install -r requirements.txt
 ```
@@ -78,10 +89,4 @@ flask db migrate -m <"migration description">
 To run DB migrations against a DB - if no DB exists, this will also create one (currently running SQLite3)
 ```bash
 flask db upgrade
-```
-
-### uwsgi
-Install uswgi (activate venv)
-```bash
-pip3 install uwsgi
 ```
