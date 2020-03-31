@@ -36,7 +36,7 @@ chmod 645 install.sh
 exit
 ```
 
-Then edit /etc/nginx/sites-available/cloud-computing with the IP address for the bridged adapter (adapter 2)
+Then edit /etc/nginx/sites-available/cloud-computing with the local IP address for the adapter
 
 ## HARD Installation
 ### Pip3
