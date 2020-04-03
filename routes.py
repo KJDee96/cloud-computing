@@ -5,8 +5,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from forms import LoginForm, RegistrationForm, EditProfileForm
 from models import User, Upload
 from werkzeug.urls import url_parse
-from forms import UploadAudioForm
-from app import audio
+from forms import UploadImageForm
+from app import images
 
 
 @app.before_request
@@ -79,11 +79,11 @@ def edit_profile():
 
 @app.route('/add', methods=['GET', 'POST'])
 @login_required
-def add_audio():
-    form = UploadAudioForm()
+def add_image():
+    form = UploadImageForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            filename = audio.save(request.files['audio_file'], folder=current_user.username)
+            filename = images.save(request.files['image_file'])
             new_upload = Upload(current_user.id, filename)
             db.session.add(new_upload)
             db.session.commit()

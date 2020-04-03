@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, EqualTo
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from models import User
-from app import audio
+from app import images
 
 
 class LoginForm(FlaskForm):
@@ -41,6 +41,6 @@ class EditProfileForm(FlaskForm):
                 raise ValidationError('Please use a different username.')
 
 
-class UploadAudioForm(FlaskForm):
-    audio_file = FileField('Audio File', validators=[FileRequired(), FileAllowed(audio, 'Audio only!')])
+class UploadImageForm(FlaskForm):
+    image_file = FileField('Image File', validators=[FileRequired(), FileAllowed(images, 'Image only!')])
 

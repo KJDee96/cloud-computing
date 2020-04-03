@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
-from flask_uploads import UploadSet, AUDIO, configure_uploads
+from flask_uploads import UploadSet, IMAGES, configure_uploads
 import logging
 from logging.handlers import RotatingFileHandler
 import os
@@ -16,8 +16,8 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 mail = Mail(app)
-audio = UploadSet('audio', AUDIO)
-configure_uploads(app, audio)
+images = UploadSet('image', IMAGES)
+configure_uploads(app, images)
 from app import app, db
 from models import User, Upload
 import routes, errors # required line

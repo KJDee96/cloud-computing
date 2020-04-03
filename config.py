@@ -9,5 +9,5 @@ class Config(object):
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    UPLOADED_AUDIO_FOLDER = 'static/audio/'
-    UPLOADED_AUDIO_DEST = basedir + '/' + UPLOADED_AUDIO_FOLDER
+    UPLOADED_IMAGE_FOLDER = 'static/uploads/images/'
+    UPLOADED_IMAGE_DEST = basedir + '/' + UPLOADED_IMAGE_FOLDER
