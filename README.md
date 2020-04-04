@@ -90,3 +90,9 @@ To run DB migrations against a DB - if no DB exists, this will also create one (
 ```bash
 flask db upgrade
 ```
+
+### AWS configure:
+Create an iam user for token and keys and run
+```bash
+aws configure
+```

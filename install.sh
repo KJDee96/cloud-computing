@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools python3-venv nginx
+apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools python3-venv nginx awscli
 
 python3.6 -m venv venv
 
@@ -12,6 +12,8 @@ pip3 install uwsgi
 flask db upgrade
 
 deactivate
+
+aws configure
 
 cp cloud-computing.service /etc/systemd/system/cloud-computing.service
 
