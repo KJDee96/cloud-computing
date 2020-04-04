@@ -1,3 +1,5 @@
+import os
+import boto3
 from app import app, db
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
@@ -83,8 +85,18 @@ def add_image():
     form = UploadImageForm()
     if request.method == 'POST':
         if form.validate_on_submit():
+            s3_client = boto3.client('s3')
+
             filename = images.save(request.files['image_file'])
-            new_upload = Upload(current_user.id, filename)
+            object_name = datetime.today().strftime('%Y%m%d-%H%M%S') + '-' + filename
+
+            s3_client.upload_file(f"{app.config['UPLOADED_IMAGE_FOLDER']}{filename}", app.config['BUCKET'],
+                                  current_user.username + '/' + object_name,
+                                  ExtraArgs={'ACL': 'public-read'})
+
+            os.remove(app.config['UPLOADED_IMAGE_FOLDER'] + filename)
+
+            new_upload = Upload(current_user.id, object_name)
             db.session.add(new_upload)
             db.session.commit()
             flash('New media, {}, added!'.format(new_upload.media_filename), 'success')
