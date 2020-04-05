@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Image upload</h1>
+    <p>If you upload an image with the same name as one on your account, that image will be updated</p>
     <form action="{{ url_for('add_image') }}" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         {{ form.image_file }}
