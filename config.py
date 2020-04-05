@@ -9,7 +9,7 @@ class Config(object):
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    BUCKET = 'tok-image-bucket'
+    BUCKET = 'us-east-1-image-bucket'
     BUCKET_FOLDER = 'https://' + BUCKET + '.s3.amazonaws.com/'
     UPLOADED_IMAGE_FOLDER = 'uploads/'
     UPLOADED_IMAGE_DEST = basedir + '/' + UPLOADED_IMAGE_FOLDER

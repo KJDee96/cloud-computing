@@ -1,5 +1,7 @@
 import os
 import boto3
+import requests as req
+import json
 from app import app, db
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
@@ -22,8 +24,10 @@ def before_request():
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
+    resp = req.get("https://freegeoip.app/json/")
+    data = json.loads(resp.text)
     return render_template("index.html", title='Home Page',
-                           uploads=current_user.uploads)
+                           uploads=current_user.uploads, data=data)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -77,8 +81,8 @@ def add_image():
             object_name = datetime.today().strftime('%Y%m%d-%H%M%S') + '-' + filename
 
             s3_client.upload_file(f"{app.config['UPLOADED_IMAGE_FOLDER']}{filename}", app.config['BUCKET'],
-                                  current_user.username + '/' + object_name,
-                                  ExtraArgs={'ACL': 'public-read'})
+                                  f"{current_user.username}/{object_name}",
+                                  ExtraArgs={'ACL': 'public-read', 'StorageClass': 'INTELLIGENT_TIERING'})
 
             os.remove(app.config['UPLOADED_IMAGE_FOLDER'] + filename)
 

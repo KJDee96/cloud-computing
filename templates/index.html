@@ -2,7 +2,8 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-
+    <p>IP: {{ data["ip"] }}</p>
+    <br>
     {% if not uploads %}
         You haven't uploaded anything
     {%  else %}
