@@ -26,7 +26,6 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different username.')
 
 
-
 class UploadImageForm(FlaskForm):
     image_file = FileField('Image File', validators=[FileRequired(), FileAllowed(images, 'Image only!')])
 

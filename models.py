@@ -4,6 +4,7 @@ from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -36,4 +37,4 @@ class Upload(db.Model):
         self.media_filename = media_filename
 
     def __repr__(self):
-        return '<Upload {}>'.format(self.body)
+        return '<Upload {}>'.format(self.media_filename)

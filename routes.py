@@ -78,20 +78,50 @@ def add_image():
             s3_client = boto3.client('s3')
 
             filename = images.save(request.files['image_file'])
-            object_name = datetime.today().strftime('%Y%m%d-%H%M%S') + '-' + filename
 
-            s3_client.upload_file(f"{app.config['UPLOADED_IMAGE_FOLDER']}{filename}", app.config['BUCKET'],
-                                  f"{current_user.username}/{object_name}",
-                                  ExtraArgs={'ACL': 'public-read', 'StorageClass': 'INTELLIGENT_TIERING'})
+            image = Upload.query.filter_by(user_id=current_user.id, media_filename=filename).first()
 
-            os.remove(app.config['UPLOADED_IMAGE_FOLDER'] + filename)
+            if image:  # update image if one with same name exists
+                s3_client.upload_file(f"{app.config['UPLOADED_IMAGE_FOLDER']}{filename}", app.config['BUCKET'],
+                                      f"{current_user.username}/{filename}",
+                                      ExtraArgs={'ACL': 'public-read', 'StorageClass': 'INTELLIGENT_TIERING'})
 
-            new_upload = Upload(current_user.id, object_name)
-            db.session.add(new_upload)
-            db.session.commit()
-            flash('New media, {}, added!'.format(new_upload.media_filename), 'success')
-            return redirect(url_for('index'))
+                os.remove(app.config['UPLOADED_IMAGE_FOLDER'] + filename)
+                flash('Media {} updated!'.format(filename), 'success')
+                return redirect(url_for('index'))
+
+            else:  # upload new image
+
+                s3_client.upload_file(f"{app.config['UPLOADED_IMAGE_FOLDER']}{filename}", app.config['BUCKET'],
+                                      f"{current_user.username}/{filename}",
+                                      ExtraArgs={'ACL': 'public-read', 'StorageClass': 'INTELLIGENT_TIERING'})
+
+                os.remove(app.config['UPLOADED_IMAGE_FOLDER'] + filename)
+
+                new_upload = Upload(current_user.id, filename)
+                db.session.add(new_upload)
+                db.session.commit()
+                flash('New media, {}, added!'.format(new_upload.media_filename), 'success')
+                return redirect(url_for('index'))
         else:
             flash('ERROR! Media was not uploaded.', 'error')
 
     return render_template('file_upload.html', form=form)
+
+
+@app.route('/delete/<image_id>', methods=['POST'])
+@login_required
+def delete_image(image_id):
+    if request.method == 'POST':
+        s3_client = boto3.client('s3')
+
+        image = Upload.query.filter_by(id=image_id).first()
+
+        s3_client.delete_object(Bucket=app.config["BUCKET"],
+                                Key=f"{current_user.username}/{image.media_filename}")
+
+        db.session.delete(image)
+        db.session.commit()
+
+        flash('Media deleted!', 'success')
+    return redirect(url_for('index'))

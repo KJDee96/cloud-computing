@@ -4,12 +4,12 @@
             {{ upload.media_filename.replace(current_user.username + '/' , '') }}
             <br>
 
-{#            <audio controls>#}
-{#                <source src="{{ request.url_root + config['UPLOADED_AUDIO_FOLDER'] + upload.media_filename }}" type="audio/mp3">#}
-{#                Your browser does not support the audio element.#}
-{#            </audio>#}
-            
             <img src="{{ 'https://' + config['CLOUDFRONT'] + '/' + current_user.username + '/' + upload.media_filename }}" alt="" style="max-width: 40%">
+        </td>
+        <td>
+            <form  method="post" action="{{ url_for('delete_image', image_id=upload.id) }}">
+                <button class="btn btn-primary" type="submit">Delete image</button>
+            </form>
         </td>
     </tr>
 </table>
