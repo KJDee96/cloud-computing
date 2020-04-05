@@ -10,6 +10,6 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     BUCKET = 'tok-image-bucket'
-    BUCKET_FOLDER = 'https://tok-image-bucket.s3.amazonaws.com/'
+    BUCKET_FOLDER = 'https://' + BUCKET + '.s3.amazonaws.com/'
     UPLOADED_IMAGE_FOLDER = 'uploads/'
     UPLOADED_IMAGE_DEST = basedir + '/' + UPLOADED_IMAGE_FOLDER
