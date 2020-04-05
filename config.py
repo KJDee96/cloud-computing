@@ -11,5 +11,6 @@ class Config(object):
 
     BUCKET = 'us-east-1-image-bucket'
     BUCKET_FOLDER = 'https://' + BUCKET + '.s3.amazonaws.com/'
+    CLOUDFRONT = 'd3ukkq3hryg82h.cloudfront.net'
     UPLOADED_IMAGE_FOLDER = 'uploads/'
     UPLOADED_IMAGE_DEST = basedir + '/' + UPLOADED_IMAGE_FOLDER
