@@ -2,6 +2,7 @@ import os
 import boto3
 import requests as req
 import json
+import socket
 from app import app, db
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
@@ -25,9 +26,13 @@ def before_request():
 @login_required
 def index():
     resp = req.get("https://freegeoip.app/json/")
-    data = json.loads(resp.text)
+    public_ip = json.loads(resp.text)
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    local_ip = s.getsockname()[0]
+    s.close()
     return render_template("index.html", title='Home Page',
-                           uploads=current_user.uploads, data=data)
+                           uploads=current_user.uploads, public_ip=public_ip, local_ip=local_ip)
 
 
 @app.route('/login', methods=['GET', 'POST'])
