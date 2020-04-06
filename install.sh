@@ -3,7 +3,7 @@
 apt -y update
 apt -y install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools python3-venv nginx awscli
 
-echo "DATABASE_URL=\"postgresql://imagedbuser:jM4A7X0s7mFX@us-east-1-rds.cf0oovcnacdx.us-east-1.rds.amazonaws.com:5432/uploads\"" >> /etc/environment
+echo "DATABASE_URI=\"postgresql://imagedbuser:jM4A7X0s7mFX@us-east-1-rds.cf0oovcnacdx.us-east-1.rds.amazonaws.com:5432/uploads\"" >> /etc/environment
 echo "BUCKET=\"us-east-1-image-bucket\"" >> /etc/environment
 echo "CLOUDFRONT=\"dmwtvmrtya2b7.cloudfront.net\"" >> /etc/environment
 
