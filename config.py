@@ -9,7 +9,6 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     BUCKET = os.environ.get('BUCKET')
-    BUCKET_FOLDER = 'https://' + BUCKET + '.s3.amazonaws.com/'
     CLOUDFRONT = os.environ.get('CLOUDFRONT')
     UPLOADED_IMAGE_FOLDER = 'uploads/'
     UPLOADED_IMAGE_DEST = basedir + '/' + UPLOADED_IMAGE_FOLDER
