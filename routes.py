@@ -139,7 +139,7 @@ def status():
         image_upload_check = True
 
         # Check outside connectivity works
-        response = os.system("ping -c 1 8.8.8.8")
+        response = os.system("/bin/ping -c 1 8.8.8.8")  # path to ping binary
         if response != 0:
             connectivity_check = False  # check fails
 
