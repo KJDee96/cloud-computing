@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p>Public IP: {{ public_ip["ip"] }}</p>
+    <p>Private IP: {{ local_ip }}</p>
+{% endblock %}

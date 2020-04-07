@@ -9,9 +9,18 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('index') }}">Home</a>
             </li>
+            {% if not current_user.is_anonymous %}
             <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('add_image') }}">Upload image</a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('status') }}">Status check</a>
+            </li>
+            {% endif %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('debug') }}">Debug</a>
+            </li>
+
         </ul>
         <ul class="navbar-nav mr-right">
             <li class="nav-item active">

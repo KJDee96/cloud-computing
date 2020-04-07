@@ -3,7 +3,8 @@ import boto3
 import requests as req
 import json
 import socket
-from app import app, db
+from app import app, db, images
+from config import get_tags
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
@@ -11,7 +12,8 @@ from forms import LoginForm, RegistrationForm
 from models import User, Upload
 from werkzeug.urls import url_parse
 from forms import UploadImageForm
-from app import images
+from sqlalchemy.exc import OperationalError
+
 
 
 @app.before_request
@@ -25,14 +27,8 @@ def before_request():
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    resp = req.get("https://freegeoip.app/json/")
-    public_ip = json.loads(resp.text)
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    local_ip = s.getsockname()[0]
-    s.close()
     return render_template("index.html", title='Home Page',
-                           uploads=current_user.uploads, public_ip=public_ip, local_ip=local_ip)
+                           uploads=current_user.uploads)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -130,3 +126,56 @@ def delete_image(image_id):
 
         flash('Media deleted!', 'success')
     return redirect(url_for('index'))
+
+
+@app.route('/status_check')
+def status():
+    tags = {entry['Key']: entry['Value'] for entry in get_tags()}  # create new dict from the list of dicts from aws
+    fail = tags.get('forceStatusFail')
+    if fail != "True":
+        # Assume they'll all pass
+        connectivity_check = True
+        db_check = True
+        image_upload_check = True
+
+        # Check outside connectivity works
+        response = os.system("/bin/ping -c 1 8.8.8.8")  # path to ping binary
+        if response != 0:
+            connectivity_check = False  # check fails
+
+        # Check DB Exists and is readable
+        try:
+            db.engine.execute("select * from alembic_version").first()  # db readable
+        except OperationalError:
+            db_check = False  # check fails
+
+        # Check S3 image store exists and is publicly accessible
+        s3_client = boto3.client('s3')
+        public_access_blocks = s3_client.get_public_access_block(Bucket=app.config["BUCKET"])
+        for value in public_access_blocks['PublicAccessBlockConfiguration'].values():  # get access values
+            if value:  # if value is true, public access is blocked
+                image_upload_check = False  # check fails
+
+        if connectivity_check and db_check and image_upload_check:
+            return f"Status check passed <br><br>" \
+                   f"connectivity_check = {connectivity_check} <br>" \
+                   f"db_check = {db_check} <br>" \
+                   f"image_upload_check = {image_upload_check}", 200
+        else:
+            return "Status check failed <br><br>" \
+                   f"connectivity_check = {connectivity_check} <br>" \
+                   f"db_check = {db_check} <br>" \
+                   f"image_upload_check = {image_upload_check}", 400
+    else:
+        return "Status check failed based on tag", 400
+
+
+@app.route('/debug')
+def debug():
+    resp = req.get("https://freegeoip.app/json/")
+    public_ip = json.loads(resp.text)
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    local_ip = s.getsockname()[0]
+    s.close()
+    return render_template("debug.html", title='Debug Page', public_ip=public_ip, local_ip=local_ip)
