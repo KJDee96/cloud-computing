@@ -3,7 +3,8 @@ import boto3
 import requests as req
 import json
 import socket
-from app import app, db
+from app import app, db, images
+from config import get_tags
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
@@ -11,8 +12,8 @@ from forms import LoginForm, RegistrationForm
 from models import User, Upload
 from werkzeug.urls import url_parse
 from forms import UploadImageForm
-from app import images
 from sqlalchemy.exc import OperationalError
+
 
 
 @app.before_request
@@ -26,14 +27,8 @@ def before_request():
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    resp = req.get("https://freegeoip.app/json/")
-    public_ip = json.loads(resp.text)
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    local_ip = s.getsockname()[0]
-    s.close()
     return render_template("index.html", title='Home Page',
-                           uploads=current_user.uploads, public_ip=public_ip, local_ip=local_ip)
+                           uploads=current_user.uploads)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -135,7 +130,10 @@ def delete_image(image_id):
 
 @app.route('/status_check')
 def status():
-    if app.config["FORCE_STATUS_FAIL"] != "True":
+    tags = {entry['Key']: entry['Value'] for entry in get_tags()}  # create new dict from the list of dicts from aws
+    fail = tags.get('forceStatusFail')
+    if fail != "True":
+        # Assume they'll all pass
         connectivity_check = True
         db_check = True
         image_upload_check = True
@@ -164,3 +162,14 @@ def status():
             return "Status check failed", 400
     else:
         return "Status check failed", 400
+
+
+@app.route('/debug')
+def debug():
+    resp = req.get("https://freegeoip.app/json/")
+    public_ip = json.loads(resp.text)
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    local_ip = s.getsockname()[0]
+    s.close()
+    return render_template("debug.html", title='Debug Page', public_ip=public_ip, local_ip=local_ip)
