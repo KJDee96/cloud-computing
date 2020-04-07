@@ -157,11 +157,17 @@ def status():
                 image_upload_check = False  # check fails
 
         if connectivity_check and db_check and image_upload_check:
-            return "Status check passed", 200
+            return f"Status check passed <br><br>" \
+                   f"connectivity_check = {connectivity_check} <br>" \
+                   f"db_check = {db_check} <br>" \
+                   f"image_upload_check = {image_upload_check}", 200
         else:
-            return "Status check failed", 400
+            return "Status check failed" \
+                   f"connectivity_check = {connectivity_check} <br>" \
+                   f"db_check = {db_check} <br>" \
+                   f"image_upload_check = {image_upload_check}", 400
     else:
-        return "Status check failed", 400
+        return "Status check failed based on tag", 400
 
 
 @app.route('/debug')
