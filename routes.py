@@ -12,6 +12,7 @@ from models import User, Upload
 from werkzeug.urls import url_parse
 from forms import UploadImageForm
 from app import images
+from sqlalchemy.exc import OperationalError
 
 
 @app.before_request
@@ -130,3 +131,36 @@ def delete_image(image_id):
 
         flash('Media deleted!', 'success')
     return redirect(url_for('index'))
+
+
+@app.route('/status_check')
+def status():
+    if app.config["FORCE_STATUS_FAIL"] != "True":
+        connectivity_check = True
+        db_check = True
+        image_upload_check = True
+
+        # Check outside connectivity works
+        response = os.system("ping -c 1 8.8.8.8")
+        if response != 0:
+            connectivity_check = False  # check fails
+
+        # Check DB Exists and is readable
+        try:
+            db.engine.execute("select * from alembic_version").first()  # db readable
+        except OperationalError:
+            db_check = False  # check fails
+
+        # Check S3 image store exists and is publicly accessible
+        s3_client = boto3.client('s3')
+        public_access_blocks = s3_client.get_public_access_block(Bucket=app.config["BUCKET"])
+        for value in public_access_blocks['PublicAccessBlockConfiguration'].values():  # get access values
+            if value:  # if value is true, public access is blocked
+                image_upload_check = False  # check fails
+
+        if connectivity_check and db_check and image_upload_check:
+            return "Status check passed", 200
+        else:
+            return "Status check failed", 400
+    else:
+        return "Status check failed", 400
