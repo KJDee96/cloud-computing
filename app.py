@@ -7,9 +7,6 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 import watchtower, logging
-from logging.handlers import RotatingFileHandler
-import os
-from datetime import datetime
 
 app = Flask(__name__)
 login = LoginManager(app)
