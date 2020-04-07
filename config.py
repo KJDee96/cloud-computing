@@ -31,7 +31,7 @@ class Config(object):
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    BUCKET = os.environ.get('S3_Log_Bucket_Name')
+    BUCKET = os.environ.get('S3_Image_Bucket_Name')
     CLOUDFRONT = os.environ.get('Cloudfront_Domain')
     UPLOADED_IMAGE_FOLDER = 'uploads/'
     UPLOADED_IMAGE_DEST = basedir + '/' + UPLOADED_IMAGE_FOLDER
