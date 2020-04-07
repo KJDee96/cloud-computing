@@ -1,3 +1,4 @@
+import requests
 from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
@@ -5,9 +6,10 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_uploads import UploadSet, IMAGES, configure_uploads
-import logging
+import watchtower, logging
 from logging.handlers import RotatingFileHandler
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -18,6 +20,7 @@ migrate = Migrate(app, db)
 mail = Mail(app)
 images = UploadSet('image', IMAGES)
 configure_uploads(app, images)
+
 from app import app, db
 from models import User, Upload
 import routes, errors # required line
@@ -29,12 +32,10 @@ def make_shell_context():
 
 
 if not app.debug:
-    if not os.path.exists('logs'):
-        os.mkdir('logs')
-    file_handler = RotatingFileHandler('logs/flask.log', maxBytes=10240,
-                                       backupCount=10)
+    instance_id = requests.get('http://169.254.169.254/latest/meta-data/instance-id')  # gets instance id
+    file_handler = watchtower.CloudWatchLogHandler(f"flask-logger")
     file_handler.setFormatter(logging.Formatter(
-        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+        f'{instance_id} %(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
 
