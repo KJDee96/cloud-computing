@@ -162,7 +162,7 @@ def status():
                    f"db_check = {db_check} <br>" \
                    f"image_upload_check = {image_upload_check}", 200
         else:
-            return "Status check failed" \
+            return "Status check failed <br><br>" \
                    f"connectivity_check = {connectivity_check} <br>" \
                    f"db_check = {db_check} <br>" \
                    f"image_upload_check = {image_upload_check}", 400
