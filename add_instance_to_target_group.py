@@ -1,9 +1,9 @@
-import re
 import boto3
+import re
 
-instance_id = ["i-abcd1111"]
-def lambda_handler(instance_id):
-    instance_id = instance_id[0]
+
+def lambda_handler(event, context):
+    instance_id = event["detail"]["instance-id"]
     ec2_client = boto3.client('ec2')
 
     private_subnets = []
@@ -28,3 +28,7 @@ def lambda_handler(instance_id):
                     }
                 ]
             )
+    return {
+        'statusCode': 200,
+        'body': f'Sucessfully added {ec2instance["Reservations"][0]["Instances"][0]["InstanceId"]} to target group'
+    }
