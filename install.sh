@@ -44,11 +44,6 @@ rm /etc/nginx/sites-enabled/default
 cp cloud-computing /etc/nginx/sites-available/cloud-computing
 ln -s /etc/nginx/sites-available/cloud-computing /etc/nginx/sites-enabled
 
-# import env variables
-echo "DATABASE_URI=\"postgresql://imagedbuser:jM4A7X0s7mFX@us-east-1-rds.cf0oovcnacdx.us-east-1.rds.amazonaws.com:5432/uploads\"" >> .env
-echo "BUCKET=\"us-east-1-image-bucket\"" >> .env
-echo "CLOUDFRONT=\"dmwtvmrtya2b7.cloudfront.net\"" >> .env
-
 # restart services
 systemctl start cloud-computing
 systemctl enable cloud-computing
