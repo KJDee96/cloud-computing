@@ -1,5 +1,8 @@
 import os
 import boto3
+import requests as req
+import json
+import socket
 from app import app, db, images
 from config import get_tags
 from datetime import datetime
@@ -169,6 +172,6 @@ def status():
 
 @app.route('/debug')
 def debug():
-    ec2_data = os.popen('./ec2-metadata').read()
-    ec2_data.splitlines()
-    return render_template("debug.html", title='Debug Page', data=ec2_data)
+    f = open("instance_data", "r")
+    data = f.readline()
+    return render_template("debug.html", title='Debug Page', data=data)
