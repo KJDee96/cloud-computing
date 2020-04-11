@@ -44,6 +44,10 @@ rm /etc/nginx/sites-enabled/default
 cp cloud-computing /etc/nginx/sites-available/cloud-computing
 ln -s /etc/nginx/sites-available/cloud-computing /etc/nginx/sites-enabled
 
+# metadata tool for debug page
+wget http://s3.amazonaws.com/ec2metadata/ec2-metadata
+chmod u+x ec2-metadata
+
 # restart services
 systemctl start cloud-computing
 systemctl enable cloud-computing

@@ -1,8 +1,5 @@
 import os
 import boto3
-import requests as req
-import json
-import socket
 from app import app, db, images
 from config import get_tags
 from datetime import datetime
@@ -172,10 +169,6 @@ def status():
 
 @app.route('/debug')
 def debug():
-    resp = req.get("https://freegeoip.app/json/")
-    public_ip = json.loads(resp.text)
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    local_ip = s.getsockname()[0]
-    s.close()
-    return render_template("debug.html", title='Debug Page', public_ip=public_ip, local_ip=local_ip)
+    ec2_data = os.popen('./ec2-metadata').read()
+    ec2_data.splitlines()
+    return render_template("debug.html", title='Debug Page', data=ec2_data)
