@@ -173,5 +173,5 @@ def status():
 @app.route('/debug')
 def debug():
     f = open("instance_data", "r")
-    data = f.readline()
+    data = f.readlines()
     return render_template("debug.html", title='Debug Page', data=data)
