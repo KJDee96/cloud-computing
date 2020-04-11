@@ -172,10 +172,6 @@ def status():
 
 @app.route('/debug')
 def debug():
-    resp = req.get("https://freegeoip.app/json/")
-    public_ip = json.loads(resp.text)
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    local_ip = s.getsockname()[0]
-    s.close()
-    return render_template("debug.html", title='Debug Page', public_ip=public_ip, local_ip=local_ip)
+    f = open("instance_data", "r")
+    data = f.readlines()
+    return render_template("debug.html", title='Debug Page', data=data)
