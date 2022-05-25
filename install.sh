@@ -11,8 +11,8 @@ pip3 install git-remote-codecommit
 mkdir /root/.aws
 cd /root/.aws
 echo "[default]
-aws_access_key_id = AKIA5HUWTH575GDDVLUV
-aws_secret_access_key = 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" > credentials
+aws_access_key_id = ""
+aws_secret_access_key = "" > credentials
 
 echo "[default]
 region = us-east-1" > config
